@@ -5,12 +5,66 @@ From: ctumrs/mrs_uav_system_modules:latest
 %post
     apt-get -y update
 
-    apt-get -y install vim zsh ranger
+    apt-get -y install zsh ranger software-properties-common language-pack-en
 
-    MRS_LOCATION=/opt/mrs
+    export MRS_LOCATION=/opt/mrs
+    export ZSH=/opt/omz
+    export ZSH_PLUGINS=$ZSH/custom/plugins
+    export NVM_DIR=/opt/nvm
 
     # link configuration file for the MRS env
     ln -s $MRS_LOCATION/host/99-mrs_env.sh /.singularity.d/env/99-mrs_env.sh
+
+    # Install oh-my-zsh
+    curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh | sh -s -- --unattended
+
+    # Install starship
+    curl -sS https://starship.rs/install.sh | sudo sh -s -- --yes
+
+    # We are installing fzf via git, as the apt version is outdated
+    git clone --depth 1 https://github.com/junegunn/fzf.git /opt/fzf && \
+    /opt/fzf/install --completion --key-bindings --no-update-rc
+
+    # Install oh-my-zsh plugins:
+    # zsh-nvm
+    git clone --depth=1 https://github.com/lukechilds/zsh-nvm $ZSH_PLUGINS/zsh-nvm
+
+    # auto-suggestions
+    git clone --depth=1 https://github.com/zsh-users/zsh-autosuggestions $ZSH_PLUGINS/zsh-autosuggestions
+
+    # syntax highlighting
+    git clone --depth=1 https://github.com/zsh-users/zsh-syntax-highlighting $ZSH_PLUGINS/zsh-syntax-highlighting
+
+    # # base16-shell colors
+    git clone --depth=1 https://github.com/chriskempson/base16-shell.git $ZSH_PLUGINS/base16-shell
+
+    # # vim-plug
+    # sh -c 'curl -fLo "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.vim --create-dirs \
+    #       https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+
+    # # Tmux Plugin Manager
+    # git clone --depth=1 https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+
+    # We need the following to install Tmux Plugins Automatically
+    # tmux start-server && \
+    #     tmux new-session -d && \
+    #     sleep 5 && \
+    #     ~/.tmux/plugins/tpm/scripts/install_plugins.sh && \
+    #     tmux kill-server
+
+    # Install NVM and node.js@18
+    # curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.2/install.sh | bash && \
+    #     [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh" && \
+    #     nvm install 18
+
+    # Install miniconda
+    # curl https://repo.anaconda.com/miniconda/Miniconda3-py39_4.12.0-Linux-x86_64.sh \
+    #     -o conda.sh && \
+    #     zsh conda.sh -b && \
+    #     rm conda.sh
+
+    # Install the italics and colors for tmux
+    # tic +x ${DOTFILES}/tmux.terminfo
 
 %environment
     export LC_ALL=C
@@ -19,9 +73,9 @@ From: ctumrs/mrs_uav_system_modules:latest
   CMD="${@}"
 
   if [ -z "${CMD}" ]; then
-    /bin/bash --login
+    /bin/zsh --login
   else
-    /bin/bash --login -c "${CMD}"
+    /bin/zsh --login -c "${CMD}"
   fi
 
   exit 0

@@ -46,6 +46,13 @@ MOUNTS=(
 
   # mount the MRS shell additions into the container, DO NOT MODIFY
   "type=bind" "$MOUNT_PATH" "/opt/mrs/host"
+
+  # Custom mounts
+  "type=bind" "$MRS_SINGULARITY_PATH/mount/dotfiles" "/home/$USER/dotfiles"
+  "type=bind" "$MRS_SINGULARITY_PATH/mount/ssh" "/home/$USER/.ssh"
+  "type=bind" "$MRS_SINGULARITY_PATH/mount/local" "/home/$USER/.local"
+  "type=bind" "$MRS_SINGULARITY_PATH/mount/config" "/home/$USER/.config"
+  "type=bind" "$MRS_SINGULARITY_PATH/mount/tmux" "/home/$USER/.tmux"
 )
 
 ## | ------------------ advanced user config ------------------ |
@@ -172,7 +179,7 @@ if [[ "$ACTION" == "run" ]]; then
   CMD="$@"
 elif [[ $ACTION == "exec" ]]; then
   shift
-  CMD="/bin/bash -c '${@}'"
+  CMD="/bin/zsh -c '${@}'"
 elif [[ $ACTION == "shell" ]]; then
   CMD=""
 else

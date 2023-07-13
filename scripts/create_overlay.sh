@@ -11,7 +11,7 @@ OVERLAYS_PATH=$REPO_PATH/overlays
 ## | ------------------------ paths end ----------------------- |
 
 OVERLAY_NAME="mrs_uav_system.img"
-OVERLAY_SIZE=500 # MB
+OVERLAY_SIZE=30000 # MB
 
 # create the template for overlay file system
 TEMPLATE_PATH=$( mktemp -d )

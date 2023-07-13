@@ -1,4 +1,5 @@
 *.swp
 *.swo
 *.sif
-wrapper.sh
+
+mount/ssh/

@@ -2,6 +2,8 @@ export SHELL=$( which zsh )
 
 PROMPT='[MRS Singularity]%1~ %# '
 
+echo "???? what"
+
 source /opt/mrs/mrs_workspace/devel/setup.zsh
 
 # source the user_workspace, if it exists
@@ -25,7 +27,7 @@ export INITIAL_DISTURBANCE_Y="0.0" # [N], external disturbance in the body frame
 export STANDALONE="false" # disables the core nodelete manager
 export SWAP_GARMINS="false" # swap up/down garmins
 export PIXGARM="false" # true if Garmin lidar is connected throught Pixhawk
-export SENSORS="" # {garmin_down, garmin_up, rplidar, realsense_front, teraranger, bluefox_optflow, realsense_brick, bluefox_brick}
+export SENSORS="garmin_down" # {garmin_down, garmin_up, rplidar, realsense_front, teraranger, bluefox_optflow, realsense_brick, bluefox_brick}
 export WORLD_NAME="simulation" # e.g.: "simulation" <= mrs_general/config/world_simulation.yaml
 export MRS_STATUS="readme" # {readme, dynamics, balloon, avoidance, control_error, gripper}
 export LOGGER_DEBUG="false" # sets the ros console output level to debug
@@ -42,9 +44,11 @@ fi
 # source uav_core from within the container
 source /opt/mrs/mrs_workspace/src/uav_core/miscellaneous/shell_additions/shell_additions.sh
 
-# source the linux setup from within
-if [ -e /opt/klaxalk/git/linux-setup/appconfig/zsh/dotzshrc ]; then
+# Source the zshrc from the dotfiles
+source $HOME/dotfiles/zshrc
 
-  source /opt/klaxalk/git/linux-setup/appconfig/zsh/dotzshrc
+cd # I have no idea why...
 
-fi
+echo $HOME
+
+echo "????"
